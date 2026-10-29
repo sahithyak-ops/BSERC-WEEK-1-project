@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoneyMap | Student Money Explorer</title>
+<style>
+:root {
+  --bg:#f4f6f8; --card:#fff; --text:#202b35; --muted:#71808b;
+  --accent:#247a66; --soft:#e3f3ed; --border:#e1e7e9;
+  --red:#c34f50; --yellow:#b47a21;
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:Inter,"Segoe UI",Arial,sans-serif; background:var(--bg); color:var(--text); }
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+.app { max-width:1150px; margin:auto; padding:24px; }
+header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:25px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo { background:var(--accent); color:white; width:45px; height:45px; border-radius:14px; display:grid; place-items:center; font-weight:800; font-size:22px; }
+h1 { font-size:21px; margin:0; }
+.brand p { font-size:12px; color:var(--muted); margin:4px 0 0; }
+.month { border:1px solid var(--border); background:var(--card); padding:10px; border-radius:10px; color:var(--text); }
+.hero { background:#173d37; color:white; border-radius:22px; padding:28px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.hero h2 { font-size:clamp(25px,4vw,35px); margin:0 0 9px; }
+.hero p { color:#d1e7df; line-height:1.6; margin:0; max-width:600px; }
+.hero-icon { font-size:60px; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:17px; padding:20px; min-width:0; }
+.stat-label { font-size:12px; color:var(--muted); }
+.stat-value { font-size:clamp(20px,3vw,28px); font-weight:750; margin:10px 0 7px; overflow-wrap:anywhere; }
+.stat-note { font-size:12px; color:var(--muted); }
+.progress { height:8px; border-radius:20px; background:#e8edef; overflow:hidden; margin:12px 0 6px; }
+.progress div { height:100%; width:0; background:var(--accent); border-radius:20px; transition:width .2s; }
+.layout { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.card h3 { font-size:17px; margin:0 0 6px; }
+.desc { font-size:12px; color:var(--muted); line-height:1.6; margin:0 0 18px; }
+label { display:block; font-size:12px; font-weight:700; margin:14px 0 7px; }
+input,select { width:100%; padding:11px; border:1px solid var(--border); background:white; color:var(--text); border-radius:10px; outline-color:var(--accent); }
+input[type=range] { padding:0; accent-color:var(--accent); border:0; }
+input[type=number] { appearance:textfield; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.btn { border:0; border-radius:10px; padding:12px 15px; font-weight:700; }
+.primary { background:var(--accent); color:white; }
+.secondary { background:var(--soft); color:var(--accent); }
+.danger { background:#fff0f0; color:var(--red); }
+.full { width:100%; margin-top:16px; }
+.filter-row { display:flex; gap:8px; margin:12px 0; }
+.filter-row select { min-width:0; }
+.expense-list { display:flex; flex-direction:column; gap:9px; }
+.expense { display:flex; align-items:center; gap:11px; border:1px solid var(--border); border-radius:12px; padding:12px; }
+.exp-icon { width:39px; height:39px; flex:0 0 39px; display:grid; place-items:center; background:var(--soft); border-radius:11px; font-size:19px; }
+.exp-info { min-width:0; flex:1; }
+.exp-info strong { display:block; font-size:13px; overflow-wrap:anywhere; }
+.exp-info small { color:var(--muted); font-size:11px; }
+.exp-amount { font-weight:750; font-size:13px; white-space:nowrap; }
+.delete { border:0; background:transparent; color:var(--red); font-size:19px; padding:4px; }
+.empty { text-align:center; padding:27px 10px; color:var(--muted); font-size:13px; line-height:1.7; }
+.category-list { display:flex; flex-direction:column; gap:15px; }
+.cat-head { display:flex; justify-content:space-between; gap:10px; font-size:12px; margin-bottom:7px; }
+.cat-head span:last-child { font-weight:700; }
+.cat-track { height:8px; background:#edf0f1; border-radius:20px; overflow:hidden; }
+.cat-fill { height:100%; background:var(--accent); border-radius:20px; }
+.budget-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.budget-head strong { font-size:22px; }
+.goal-row { display:flex; justify-content:space-between; font-size:12px; gap:10px; margin:10px 0; }
+.tip { border-left:4px solid var(--accent); background:var(--soft); padding:14px; border-radius:0 11px 11px 0; font-size:12px; line-height:1.7; margin-top:14px; }
+footer { text-align:center; padding:20px 5px; color:var(--muted); font-size:11px; }
+@media(max-width:760px) {
+  .app { padding:14px; }
+  .hero { padding:22px; }
+  .hero-icon { display:none; }
+  .layout { grid-template-columns:1fr; }
+  .stats { grid-template-columns:1fr; }
+  .stat-value { font-size:25px; }
+  .card { padding:17px; }
+}
+@media(max-width:390px) {
+  .form-grid { grid-template-columns:1fr; gap:0; }
+  header { align-items:flex-start; }
+  .month { max-width:150px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">M</div>
+      <div><h1>MoneyMap</h1><p>A simple money tracker for students</p></div>
+    </div>
+    <input class="month" type="month" id="month" aria-label="Selected month">
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>Know where your money goes.</h2>
+      <p>Track everyday spending, plan a monthly budget and work towards a savings goal. Small decisions become easier when you can see the numbers.</p>
+    </div>
+    <div class="hero-icon">💸</div>
+  </section>
+
+  <section class="stats">
+    <div class="card">
+      <div class="stat-label">Total spent this month</div>
+      <div class="stat-value" id="spent">₹0</div>
+      <div class="stat-note" id="spentNote">No expenses recorded yet</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Budget remaining</div>
+      <div class="stat-value" id="remaining">₹5,000</div>
+      <div class="progress"><div id="budgetBar"></div></div>
+      <div class="stat-note" id="budgetNote">0% of your budget used</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Savings goal progress</div>
+      <div class="stat-value" id="saved">₹0</div>
+      <div class="progress"><div id="goalBar"></div></div>
+      <div class="stat-note" id="goalNote">Set a goal to get started</div>
+    </div>
+  </section>
+
+  <main class="layout">
+    <section class="card">
+      <h3>Monthly budget</h3>
+      <p class="desc">Set an amount that fits your allowance or income.</p>
+      <div class="budget-head"><span class="desc">Your monthly budget</span><strong id="budgetLabel">₹5,000</strong></div>
+      <input id="budgetRange" type="range" min="500" max="30000" step="500" value="5000">
+      <div class="goal-row"><span>₹500</span><span>₹30,000</span></div>
+      <label for="budgetInput">Or enter a specific budget (₹)</label>
+      <input id="budgetInput" type="number" min="1" max="10000000" value="5000">
+      <button class="btn primary full" id="saveBudget">Update budget</button>
+    </section>
+
+    <section class="card">
+      <h3>Add an expense</h3>
+      <p class="desc">Record what you spent to keep your monthly totals useful.</p>
+      <form id="expenseForm">
+        <label for="expenseName">What did you spend on?</label>
+        <input id="expenseName" maxlength="60" placeholder="e.g. Lunch, bus fare, stationery" required>
+        <div class="form-grid">
+          <div><label for="expenseAmount">Amount (₹)</label><input id="expenseAmount" type="number" min="0.01" max="10000000" step="0.01" placeholder="120" required></div>
+          <div><label for="expenseCategory">Category</label>
+            <select id="expenseCategory">
+              <option>Food</option><option>Transport</option><option>Education</option>
+              <option>Shopping</option><option>Entertainment</option><option>Health</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <label for="expenseDate">Date</label>
+        <input id="expenseDate" type="date" required>
+        <button class="btn primary full" type="submit">+ Add expense</button>
+      </form>
+      <p id="formMessage" class="desc" aria-live="polite" style="margin:10px 0 0"></p>
+    </section>
+
+    <section class="card">
+      <h3>Spending breakdown</h3>
+      <p class="desc">Compare how much you have spent in each category this month.</p>
+      <div id="categoryList" class="category-list"></div>
+    </section>
+
+    <section class="card">
+      <h3>Savings goal</h3>
+      <p class="desc">Choose something you want to save for and track your progress.</p>
+      <label for="goalName">What are you saving for?</label>
+      <input id="goalName" maxlength="60" placeholder="e.g. Headphones, a course, a trip">
+      <label for="goalTarget">Target amount (₹)</label>
+      <input id="goalTarget" type="number" min="1" max="10000000" value="5000">
+      <label for="goalCurrent">Amount saved so far (₹)</label>
+      <input id="goalCurrent" type="number" min="0" max="10000000" value="0">
+      <button class="btn primary full" id="saveGoal">Update savings goal</button>
+      <div class="goal-row"><span id="goalProgressText">0% complete</span><strong id="goalLeft">₹5,000 to go</strong></div>
+      <div class="progress"><div id="goalDetailBar"></div></div>
+    </section>
+
+    <section class="card" style="grid-column:1/-1">
+      <div class="budget-head">
+        <div><h3>Recent expenses</h3><p class="desc" style="margin:5px 0 0">Review, filter or remove your entries.</p></div>
+        <button class="btn secondary" id="exportBtn" type="button">Export CSV</button>
+      </div>
+      <div class="filter-row">
+        <select id="filterCategory" aria-label="Filter by category">
+          <option value="All">All categories</option><option>Food</option><option>Transport</option>
+          <option>Education</option><option>Shopping</option><option>Entertainment</option><option>Health</option><option>Other</option>
+        </select>
+        <select id="sortBy" aria-label="Sort expenses">
+          <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="high">Highest amount</option><option value="low">Lowest amount</option>
+        </select>
+      </div>
+      <div id="expenseList" class="expense-list"></div>
+      <button class="btn danger full" id="clearMonth" type="button">Delete all expenses for this month</button>
+      <p id="listMessage" class="desc" aria-live="polite" style="margin:10px 0 0"></p>
+    </section>
+
+    <section class="card" style="grid-column:1/-1">
+      <h3>Your money snapshot</h3>
+      <p class="desc">A simple observation based on the expenses and budget you've entered.</p>
+      <div id="insight" class="tip">Add your first expense to see your spending snapshot.</div>
+    </section>
+  </main>
+  <footer>MoneyMap · A budgeting practice tool · All amounts are examples until you enter your own data</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const categories = {
+  Food:"🍱", Transport:"🚌", Education:"📚", Shopping:"🛍️",
+  Entertainment:"🎬", Health:"🩺", Other:"📌"
+};
+const today = new Date();
+const localDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const monthOf = d => d.slice(0,7);
+const currency = n => "₹" + Number(n || 0).toLocaleString("en-IN",{maximumFractionDigits:2});
+let expenses = [];
+let budget = 5000;
+let goal = {name:"",target:5000,current:0};
+
+function loadData() {
+  try {
+    const raw = JSON.parse(localStorage.getItem("moneyMapData") || "{}");
+    expenses = Array.isArray(raw.expenses) ? raw.expenses.filter(e =>
+      e && typeof e.id === "string" && typeof e.name === "string" &&
+      Number.isFinite(Number(e.amount)) && Number(e.amount) > 0 &&
+      categories[e.category] && /^\d{4}-\d{2}-\d{2}$/.test(e.date)
+    ) : [];
+    budget = Number.isFinite(Number(raw.budget)) && Number(raw.budget)>0 ? Number(raw.budget) : 5000;
+    goal = {
+      name: typeof raw.goal?.name === "string" ? raw.goal.name : "",
+      target: Number.isFinite(Number(raw.goal?.target)) && Number(raw.goal?.target)>0 ? Number(raw.goal.target) : 5000,
+      current: Number.isFinite(Number(raw.goal?.current)) && Number(raw.goal?.current)>=0 ? Number(raw.goal.current) : 0
+    };
+  } catch {
+    expenses=[]; budget=5000; goal={name:"",target:5000,current:0};
+  }
+}
+function saveData() {
+  try {
+    localStorage.setItem("moneyMapData",JSON.stringify({expenses,budget,goal}));
+    return true;
+  } catch { return false; }
+}
+function monthExpenses() {
+  const m = $("month").value;
+  return expenses.filter(e => monthOf(e.date) === m);
+}
+function sum(list) { return list.reduce((s,e)=>s+Number(e.amount),0); }
+function setBar(id,pct) { $(id).style.width=Math.min(100,Math.max(0,pct))+"%"; }
+
+function render() {
+  const list=monthExpenses();
+  const spent=sum(list);
+  const remaining=budget-spent;
+  $("spent").textContent=currency(spent);
+  $("spentNote").textContent=list.length+" expense"+(list.length===1?"":"s")+" recorded";
+  $("remaining").textContent=currency(remaining);
+  $("remaining").style.color=remaining<0?"var(--red)":"var(--text)";
+  const pct=spent/budget*100;
+  setBar("budgetBar",pct);
+  $("budgetBar").style.background=pct>100?"var(--red)":"var(--accent)";
+  $("budgetNote").textContent=Math.round(pct)+"% of your budget used";
+  $("budgetLabel").textContent=currency(budget);
+  $("budgetInput").value=budget;
+  $("budgetRange").value=Math.min(30000,Math.max(500,budget));
+  $("saved").textContent=currency(goal.current);
+  setBar("goalBar",goal.current/goal.target*100);
+  $("goalNote").textContent=goal.name || "Savings goal";
+  $("goalName").value=goal.name;
+  $("goalTarget").value=goal.target;
+  $("goalCurrent").value=goal.current;
+  const goalPct=Math.min(100,goal.current/goal.target*100);
+  $("goalProgressText").textContent=Math.round(goalPct)+"% complete";
+  $("goalLeft").textContent=goal.current>=goal.target?"Goal reached!":currency(goal.target-goal.current)+" to go";
+  setBar("goalDetailBar",goalPct);
+  renderCategories(list,spent);
+  renderExpenses();
+  renderInsight(list,spent,remaining,pct);
+}
+
+function renderCategories(list,spent) {
+  const totals={};
+  Object.keys(categories).forEach(c=>totals[c]=0);
+  list.forEach(e=>totals[e.category]+=Number(e.amount));
+  const sorted=Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+  $("categoryList").innerHTML=sorted.map(([cat,amount])=>`
+    <div>
+      <div class="cat-head"><span>${categories[cat]} ${cat}</span><span>${currency(amount)} · ${spent?Math.round(amount/spent*100):0}%</span></div>
+      <div class="cat-track"><div class="cat-fill" style="width:${spent?amount/spent*100:0}%"></div></div>
+    </div>`).join("");
+}
+
+function renderExpenses() {
+  const filter=$("filterCategory").value;
+  const sort=$("sortBy").value;
+  let list=monthExpenses().filter(e=>filter==="All"||e.category===filter);
+  if(sort==="newest") list.sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+  if(sort==="oldest") list.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+  if(sort==="high") list.sort((a,b)=>b.amount-a.amount);
+  if(sort==="low") list.sort((a,b)=>a.amount-b.amount);
+  $("expenseList").innerHTML=list.length?list.map(e=>`
+    <div class="expense">
+      <div class="exp-icon">${categories[e.category]}</div>
+      <div class="exp-info"><strong>${escapeHTML(e.name)}</strong><small>${e.category} · ${e.date}</small></div>
+      <div class="exp-amount">${currency(e.amount)}</div>
+      <button class="delete" data-delete="${e.id}" aria-label="Delete ${escapeHTML(e.name)}">×</button>
+    </div>`).join(""):`<div class="empty">No expenses match this view.<br>Add an expense or change the filter.</div>`;
+}
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function renderInsight(list,spent,remaining,pct) {
+  let message;
+  if(!list.length) message="No expenses recorded for this month yet. Add a few entries to see a useful spending summary.";
+  else if(remaining<0) message=`You've gone ${currency(-remaining)} over your budget. Review the category breakdown and adjust your plan if needed.`;
+  else if(pct>=80) message=`You've used ${Math.round(pct)}% of your budget. Check upcoming expenses before making additional purchases.`;
+  else {
+    const totals={};
+    list.forEach(e=>totals[e.category]=(totals[e.category]||0)+Number(e.amount));
+    const top=Object.entries(totals).sort((a,b)=>b[1]-a[1])[0];
+    message=`You've spent ${currency(spent)} and have ${currency(remaining)} left in your budget. Your largest recorded category is ${top[0]} (${currency(top[1])}).`;
+  }
+  $("insight").textContent=message;
+}
+function message(id,text) { $(id).textContent=text; }
+
+$("month").value=localDate(today).slice(0,7);
+$("expenseDate").value=localDate(today);
+loadData();
+render();
+
+$("budgetRange").addEventListener("input",()=>{
+  $("budgetInput").value=$("budgetRange").value;
+});
+$("saveBudget").addEventListener("click",()=>{
+  const n=Number($("budgetInput").value);
+  if(!Number.isFinite(n)||n<=0||n>10000000) return message("formMessage","Enter a budget between ₹1 and ₹1 crore.");
+  budget=n;
+  saveData(); render();
+  message("formMessage","Budget updated.");
+});
+$("budgetInput").addEventListener("input",()=>{
+  const n=Number($("budgetInput").value);
+  if(n>=500&&n<=30000) $("budgetRange").value=n;
+});
+$("saveGoal").addEventListener("click",()=>{
+  const target=Number($("goalTarget").value);
+  const current=Number($("goalCurrent").value);
+  if(!Number.isFinite(target)||target<=0||target>10000000||!Number.isFinite(current)||current<0||current>10000000)
+    return message("formMessage","Enter a valid target and savings amount.");
+  goal={name:$("goalName").value.trim(),target,current};
+  saveData(); render();
+  message("formMessage","Savings goal updated.");
+});
+$("expenseForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  const name=$("expenseName").value.trim();
+  const amount=Number($("expenseAmount").value);
+  const category=$("expenseCategory").value;
+  const date=$("expenseDate").value;
+  if(!name||name.length>60||!Number.isFinite(amount)||amount<=0||amount>10000000||!categories[category]||!date)
+    return message("formMessage","Check the name, amount, category and date.");
+  if(monthOf(date)!== $("month").value) {
+    $("month").value=monthOf(date);
+  }
+  expenses.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),name,amount,category,date});
+  saveData(); render();
+  $("expenseName").value="";
+  $("expenseAmount").value="";
+  message("formMessage","Expense added successfully.");
+});
+$("month").addEventListener("change",render);
+$("filterCategory").addEventListener("change",renderExpenses);
+$("sortBy").addEventListener("change",renderExpenses);
+
+$("expenseList").addEventListener("click",event=>{
+  const btn=event.target.closest("[data-delete]");
+  if(!btn) return;
+  expenses=expenses.filter(e=>e.id!==btn.dataset.delete);
+  saveData(); render();
+  message("listMessage","Expense deleted.");
+});
+$("clearMonth").addEventListener("click",()=>{
+  const current=$("month").value;
+  const count=monthExpenses().length;
+  if(!count) return message("listMessage","There are no expenses for this month.");
+  if(!confirm(`Delete all ${count} expenses for ${current}? This cannot be undone.`)) return;
+  expenses=expenses.filter(e=>monthOf(e.date)!==current);
+  saveData(); render();
+  message("listMessage","Expenses for the selected month were deleted.");
+});
+$("exportBtn").addEventListener("click",()=>{
+  const list=monthExpenses();
+  if(!list.length) return message("listMessage","Add expenses for this month before exporting.");
+  const rows=[["Date","Description","Category","Amount"],...list.map(e=>[e.date,e.name,e.category,e.amount])];
+  const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="moneymap-expenses-"+$("month").value+".csv";
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  message("listMessage","CSV export started.");
+});
+</script>
+</body>
+</html>

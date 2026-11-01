@@ -1,0 +1,45 @@
+
+# Prompts Used – PyRevise
+
+This file contains the main AI prompts used while working on the
+Python Revision Dashboard.
+
+## 1. Planning the project
+
+"Help me plan a Python revision dashboard using HTML, CSS and
+JavaScript. It should have useful revision features and work on
+both a laptop and a phone."
+
+## 2. Building the HTML
+
+Create the HTML structure for a Python Revision Dashboard with
+an overview page... Python topics... a practice quiz and flashcards and also 
+include navigation and the required controls for each section
+
+## 3. Styling the dashboard
+
+Write CSS for the dashboard with a clean layout, sidebar
+navigation, cards, buttons, quiz styles, flashcards and a
+responsive design for smaller screens
+
+## 4. Adding JavaScript functionality
+
+Add JavaScript functionality for navigation, Python topic
+search and filters, revision progress, a daily checklist,
+a multiple-choice quiz with scoring and feedback, flashcards,
+dark mode and browser local storage
+
+## 5. Testing and fixing
+
+Help me check the dashboard features and identify any issues
+before submitting the project
+
+## Development notes
+
+The project was built using HTML, CSS and JavaScript in three
+separate files. AI assistance was used to generate and organize
+the initial code. I saved the files locally and tested the
+dashboard in a web browser.
+
+Further improvements could include more Python questions,
+additional revision topics and a more polished user interface.

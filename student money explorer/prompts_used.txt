@@ -1,0 +1,27 @@
+## Project 3: Student Money Explorer
+
+### Prompt 1 — Planning
+Create a single-file interactive student budgeting tool that helps users record daily expenses, manage a monthly budget, understand their spending and track a savings goal.
+
+### Prompt 2 — Interface
+Design a clean, modern, responsive dashboard with summary cards, a budget section, an expense form, a category-wise spending breakdown, a savings goal section and a recent-expenses list. Make it work on laptops and mobile phones.
+
+### Prompt 3 — Expense Management
+Use JavaScript to add and delete expenses, assign categories, select dates, filter by category, sort by date or amount, and view expenses for a selected month. Validate user inputs.
+
+### Prompt 4 — Budget and Savings
+Add an adjustable monthly budget, a remaining-balance calculation, savings-goal tracking and a spending summary based on the entered expenses.
+
+### Prompt 5 — Data Persistence and Export
+Use browser localStorage to retain expenses and settings after refresh. Add CSV export so users can open their expense records in spreadsheet applications. Avoid requiring a backend or external API.
+
+### Development and Testing Notes
+The project was implemented as a single HTML file with embedded CSS and JavaScript. Test the expense form, budget calculations, savings goal, filters, sorting, CSV export and browser storage before submission.
+
+### Possible Future Improvements
+- Add expense editing.
+- Add visual charts for monthly trends.
+- Include income and recurring payments.
+- Add backup and restore functionality.
+
+Note: This file summarises the prompts and development approach used for the project. Adjust it if your actual prompts or implementation differ.

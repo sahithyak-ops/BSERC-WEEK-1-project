@@ -1,0 +1,22 @@
+## Project 2: Learning Path Decision Helper
+
+### Prompt 1 — Planning
+Create a single-file interactive HTML tool that helps students choose a learning path based on their interests, current skill level, goals and available daily study time. Make it useful for college students and beginners.
+
+### Prompt 2 — Interface
+Design a clean, modern and responsive interface with three sections: Discover, My Learning Path and Learning Guide. Use cards, selectable options, dropdowns, a time slider and clear navigation. Make the layout work on laptops and mobile phones.
+
+### Prompt 3 — Functionality
+Use JavaScript to support multiple learning tracks, customise the roadmap based on user selections, show suggested learning stages and mini-projects, and allow users to mark stages as completed.
+
+### Prompt 4 — Saving and usability
+Add browser localStorage so users can save and restore their learning plan. Include a print option, helpful study tips and basic error handling. Keep everything inside one HTML file without requiring a backend or external API.
+
+### Development and Testing Notes
+The HTML, CSS and JavaScript were combined into a single file. The page was opened in a browser and its interactive features were tested. The learning paths are predefined and the suggested durations are estimates, not guaranteed completion times.
+
+### Possible Future Improvements
+- Add more learning tracks and resource links.
+- Allow users to edit individual stages.
+- Add a progress summary and completion percentage.
+- Improve recommendations using more detailed user preferences.

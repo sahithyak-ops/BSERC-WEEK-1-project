@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyRevise | Python Revision Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">Py</span> PyRevise</div>
+    <p class="side-label">YOUR WORKSPACE</p>
+
+    <button class="nav-link active" data-page="overview">⌂ <span>Overview</span></button>
+    <button class="nav-link" data-page="topics">▤ <span>Python Topics</span></button>
+    <button class="nav-link" data-page="quiz">✎ <span>Practice Quiz</span></button>
+    <button class="nav-link" data-page="flashcards">▣ <span>Flashcards</span></button>
+
+    <div class="sidebar-bottom">
+      <div class="python-badge">🐍</div>
+      <strong>Keep learning!</strong>
+      <p>Small steps make great programmers.</p>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">YOUR PERSONAL LEARNING SPACE</p>
+        <h1 id="page-title">Python Revision Dashboard</h1>
+      </div>
+      <button id="theme-toggle" class="icon-button" aria-label="Toggle theme">☾</button>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section class="page active" id="overview">
+      <div class="welcome-banner">
+        <div>
+          <p class="eyebrow light">WELCOME BACK, LEARNER 👋</p>
+          <h2>Ready to level up your Python?</h2>
+          <p>Revise concepts, test your knowledge and track your progress.</p>
+          <button class="button button-light" data-go="topics">Start revising →</button>
+        </div>
+        <div class="hero-python">🐍</div>
+      </div>
+
+      <div class="section-heading">
+        <div><h2>Your progress</h2><p>A snapshot of your revision journey.</p></div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-icon purple">▤</span>
+          <p>Topics reviewed</p>
+          <h2 id="reviewed-count">0 / 8</h2>
+          <div class="progress-track"><div id="topic-progress" class="progress-fill"></div></div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon green">✓</span>
+          <p>Quiz questions answered</p>
+          <h2 id="answered-count">0</h2>
+          <span class="muted">Across your practice sessions</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon orange">★</span>
+          <p>Quiz accuracy</p>
+          <h2 id="accuracy-count">0%</h2>
+          <span class="muted">Correct answers overall</span>
+        </article>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="panel">
+          <div class="section-heading">
+            <div><h2>Today's checklist</h2><p>Build a consistent revision habit.</p></div>
+            <span class="pill" id="checklist-count">0 / 4</span>
+          </div>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" data-task="0"> <span>Revise Python data types</span></label>
+            <label class="check-item"><input type="checkbox" data-task="1"> <span>Practice loops and conditions</span></label>
+            <label class="check-item"><input type="checkbox" data-task="2"> <span>Review functions and collections</span></label>
+            <label class="check-item"><input type="checkbox" data-task="3"> <span>Attempt a practice quiz</span></label>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="section-heading"><div><h2>Quick practice</h2><p>Choose how you want to revise.</p></div></div>
+          <button class="quick-action" data-go="topics"><span class="action-icon purple">▤</span><span><strong>Explore topics</strong><small>Review concepts and examples</small></span><span class="arrow">→</span></button>
+          <button class="quick-action" data-go="quiz"><span class="action-icon green">✎</span><span><strong>Take a quiz</strong><small>Check your understanding</small></span><span class="arrow">→</span></button>
+          <button class="quick-action" data-go="flashcards"><span class="action-icon orange">▣</span><span><strong>Use flashcards</strong><small>Recall important concepts</small></span><span class="arrow">→</span></button>
+        </article>
+      </div>
+    </section>
+
+    <!-- TOPICS -->
+    <section class="page" id="topics">
+      <div class="page-intro">
+        <h2>Explore Python</h2>
+        <p>Choose a concept, review its notes and mark it as reviewed.</p>
+      </div>
+      <div class="topic-tools">
+        <input id="topic-search" type="search" placeholder="⌕  Search Python topics...">
+        <select id="topic-filter" aria-label="Filter topics">
+          <option value="all">All topics</option>
+          <option value="pending">Not reviewed</option>
+          <option value="reviewed">Reviewed</option>
+        </select>
+      </div>
+      <div class="topic-grid" id="topic-grid"></div>
+      <article class="panel topic-detail" id="topic-detail">
+        <div class="empty-state">Select a topic above to see its revision notes.</div>
+      </article>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="page" id="quiz">
+      <div class="page-intro">
+        <h2>Python practice quiz</h2>
+        <p>Test your knowledge with multiple-choice questions.</p>
+      </div>
+      <article class="panel quiz-settings" id="quiz-settings">
+        <label>Choose a topic
+          <select id="quiz-category">
+            <option value="all">All topics</option>
+            <option value="basics">Python Basics</option>
+            <option value="variables">Variables & Data Types</option>
+            <option value="conditions">Conditions & Loops</option>
+            <option value="functions">Functions</option>
+            <option value="collections">Collections</option>
+            <option value="strings">Strings</option>
+            <option value="errors">Errors & Exceptions</option>
+            <option value="files">File Handling</option>
+          </select>
+        </label>
+        <label>Number of questions
+          <select id="quiz-length">
+            <option value="5">5 questions</option>
+            <option value="10">10 questions</option>
+            <option value="15">15 questions</option>
+          </select>
+        </label>
+        <button id="start-quiz" class="button button-primary">Start quiz →</button>
+      </article>
+      <article class="panel quiz-panel hidden" id="quiz-panel"></article>
+      <article class="panel quiz-result hidden" id="quiz-result"></article>
+    </section>
+
+    <!-- FLASHCARDS -->
+    <section class="page" id="flashcards">
+      <div class="page-intro">
+        <h2>Flashcard studio</h2>
+        <p>Recall a concept before flipping the card to reveal the answer.</p>
+      </div>
+      <div class="flashcard-toolbar">
+        <label>Topic
+          <select id="flashcard-category">
+            <option value="all">All topics</option>
+            <option value="basics">Python Basics</option>
+            <option value="variables">Variables & Data Types</option>
+            <option value="conditions">Conditions & Loops</option>
+            <option value="functions">Functions</option>
+            <option value="collections">Collections</option>
+            <option value="strings">Strings</option>
+            <option value="errors">Errors & Exceptions</option>
+            <option value="files">File Handling</option>
+          </select>
+        </label>
+        <button class="button button-secondary" id="shuffle-cards">⇄ Shuffle</button>
+        <button class="button button-secondary" id="known-filter">Show: All</button>
+      </div>
+      <div class="flashcard-area">
+        <p class="muted" id="card-counter">Card 1</p>
+        <button class="flashcard" id="flashcard" aria-label="Flip flashcard">
+          <span class="flashcard-label" id="flashcard-label">QUESTION</span>
+          <span class="flashcard-text" id="flashcard-text">Loading card...</span>
+          <span class="flashcard-hint" id="flashcard-hint">Click to reveal answer</span>
+        </button>
+        <div class="flashcard-controls">
+          <button class="button button-secondary" id="previous-card">← Previous</button>
+          <button class="button button-primary" id="flip-card">Flip card</button>
+          <button class="button button-secondary" id="next-card">Next →</button>
+        </div>
+        <button class="button button-secondary" id="mark-known">✓ Mark as known</button>
+        <p class="muted" id="known-count">0 cards marked as known</p>
+      </div>
+    </section>
+
+    <footer>PyRevise · Learn a little Python every day. <span>Made for curious minds 🐍</span></footer>
+  </main>
+</body>
+</html>
